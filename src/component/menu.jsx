@@ -16,11 +16,14 @@ import kartaprestupnosti from "../image/kartaprestupnosti.svg";
 import stat from "../image/stat.svg";
 import thematicMap from "../image/thematicMap.svg";
 import pollingStations from "../image/pollingStations.svg";
+import { Auction } from "../menu/auction.jsx";
+import { Сontest } from "../menu/contest";
 export const Menu = () => {
   const [state, setState] = useState("home");
   const { Title } = Typography;
   const back = () => setState("home");
   const callback = (arg) => {
+    console.log(arg);
     setState(arg);
   };
   return (
@@ -36,8 +39,10 @@ export const Menu = () => {
       </header>
       <div className="container" style={{ minHeight: 400 }}>
         {state === "home" ? <Home callback={callback} /> : null}
-        {state === "tender" ? <Tender /> : null}
-        {state === "organization" ? <Organization /> : null}
+        {state === "tender" ? <Tender callback={callback} /> : null}
+        {state === "organization" ? <Organization callback={callback} /> : null}
+        {state === "auction" ? <Auction /> : null}
+        {state === "contest" ? <Сontest /> : null}
       </div>
       <footer>
         <div>
@@ -60,11 +65,6 @@ const Faq = () => {
   const showModal = () => {
     setIsModalVisible(true);
   };
-
-  const handleOk = () => {
-    setIsModalVisible(false);
-  };
-
   const handleCancel = () => {
     setIsModalVisible(false);
   };
