@@ -16,15 +16,19 @@ import kartaprestupnosti from "../image/kartaprestupnosti.svg";
 import stat from "../image/stat.svg";
 import thematicMap from "../image/thematicMap.svg";
 import pollingStations from "../image/pollingStations.svg";
+import road from "../image/road.png";
 import { Auction } from "../menu/auction.jsx";
 import { Сontest } from "../menu/contest";
-export const Menu = () => {
+export const Menu = ({ setMap }) => {
   const [state, setState] = useState("home");
   const { Title } = Typography;
   const back = () => setState("home");
   const callback = (arg) => {
-    console.log(arg);
     setState(arg);
+  };
+  const map = (arg) => {
+    console.log(arg);
+    setMap(arg);
   };
   return (
     <div className="menu">
@@ -38,7 +42,7 @@ export const Menu = () => {
         <Input placeholder="Пойск" />
       </header>
       <div className="container" style={{ minHeight: 400 }}>
-        {state === "home" ? <Home callback={callback} /> : null}
+        {state === "home" ? <Home callback={callback} map={map} /> : null}
         {state === "tender" ? <Tender callback={callback} /> : null}
         {state === "organization" ? <Organization callback={callback} /> : null}
         {state === "auction" ? <Auction /> : null}
@@ -137,7 +141,7 @@ const Phone = () => {
   );
 };
 
-const Home = ({ callback }) => {
+const Home = ({ callback, map }) => {
   let ul = [
     { title: "Земельные торги", img: tenders, callback: () => callback("tender") },
     { title: "Обращения", img: obrasheniya },
@@ -151,11 +155,12 @@ const Home = ({ callback }) => {
     { title: "Свободные земельные участки", img: thematicMap },
     { title: "Госуслуги и сервисы", img: eatyrau },
     { title: "Избирательные участки", img: pollingStations },
+    { title: "Дорога", img: road, map: () => map("rouads") },
   ];
   return (
     <div className="grid">
       {ul.map((item, i) => (
-        <Li img={item.img} title={item.title} key={i} callback={item.callback} />
+        <Li img={item.img} title={item.title} key={i} callback={item.callback} map={item.map} />
       ))}
     </div>
   );
