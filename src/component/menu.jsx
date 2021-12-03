@@ -21,11 +21,13 @@ import pollingStations from "../image/pollingStations.svg";
 import water from "../image/water.png";
 import road from "../image/road.png";
 import home from "../image/home.png";
+import { OrganizationId } from "../menu/organizationId";
 export const Menu = ({ setMap }) => {
   const [state, setState] = useState("home");
   const { Title } = Typography;
   const back = () => setState("home");
   const callback = (arg) => {
+    console.log(arg);
     setState(arg);
   };
   const map = (arg) => {
@@ -49,6 +51,7 @@ export const Menu = ({ setMap }) => {
         {state === "organization" ? <Organization callback={callback} /> : null}
         {state === "auction" ? <Auction /> : null}
         {state === "contest" ? <Сontest /> : null}
+        {state.indexOf("organizationP") !== -1 ? <OrganizationId title={state} /> : null}
       </div>
       <footer>
         <div>
