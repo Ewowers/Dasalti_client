@@ -5,6 +5,8 @@ import { Li } from "./li";
 import "./menu.css";
 import { Tender } from "../menu/tednder";
 import { Organization } from "../menu/organizations";
+import { Auction } from "../menu/auction.jsx";
+import { Сontest } from "../menu/contest";
 import tenders from "../image/tenders.svg";
 import spravochnik from "../image/spravochnik.svg";
 import meropriyatia from "../image/meropriyatia.svg";
@@ -16,9 +18,9 @@ import kartaprestupnosti from "../image/kartaprestupnosti.svg";
 import stat from "../image/stat.svg";
 import thematicMap from "../image/thematicMap.svg";
 import pollingStations from "../image/pollingStations.svg";
+import water from "../image/water.png";
 import road from "../image/road.png";
-import { Auction } from "../menu/auction.jsx";
-import { Сontest } from "../menu/contest";
+import home from "../image/home.png";
 export const Menu = ({ setMap }) => {
   const [state, setState] = useState("home");
   const { Title } = Typography;
@@ -156,6 +158,8 @@ const Home = ({ callback, map }) => {
     { title: "Госуслуги и сервисы", img: eatyrau },
     { title: "Избирательные участки", img: pollingStations },
     { title: "Дорога", img: road, map: () => map("rouads") },
+    { title: "Река", img: water, map: () => map("water") },
+    { title: "Контур деревни", img: home, map: () => map("home") },
   ];
   return (
     <div className="grid">
