@@ -1,14 +1,15 @@
 import axios from "axios";
-import { Form, Input, Button, Space, Typography } from "antd";
+import { Form, Input, Button, Space, Typography, Modal } from "antd";
 import { useEffect, useState } from "react";
 export const OrganizationId = ({ title }) => {
+  const [modal, setModal] = useState(false);
   const [state, setState] = useState([]);
+  const [info, setInfo] = useState({});
   const { Title, Paragraph } = Typography;
   let param = title.split("-");
   param = param[param.length - 1];
   let titles = params(param);
   const onFinish = (values) => {
-    console.log(values);
     axios.post("http://localhost:5000/api/directory/create/" + param, { ...values, category: param }).then((res) => get());
   };
   const onFinishFailed = (errorInfo) => {
@@ -16,6 +17,9 @@ export const OrganizationId = ({ title }) => {
   };
   const get = () => {
     axios.get("http://localhost:5000/api/directory/" + param).then((res) => setState(res.data));
+  };
+  const showModal = () => {
+    setModal(true);
   };
   useEffect(() => {
     get();
@@ -25,14 +29,25 @@ export const OrganizationId = ({ title }) => {
       <Title level={3} style={{ textAlign: "center" }}>
         {titles}
       </Title>
-      <Space direction="vertical">
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        {/*{state.map((item, i) => {
+          return (
+            <p key={i} onClick={showModal} style={{ marginBottom: 5, borderBottom: "1px solid", width: "100%" }}>
+              {item.title}
+            </p>
+          );
+        })}*/}
         {state.map((item, i) => {
-          return <Paragraph key={i}>{item.title}</Paragraph>;
+          return (
+            <p key={i} onClick={showModal} style={{ marginBottom: 5, background: "rgb(206, 199, 235)", width: "100%", borderRadius: 10 }}>
+              {item.title}
+            </p>
+          );
         })}
-      </Space>
+      </div>
       <Form onFinish={onFinish} onFinishFailed={onFinishFailed}>
         <div style={{ display: "flex" }}>
-          <Form.Item name="title" style={{ width: "100%" }}>
+          <Form.Item name="title" style={{ width: "100%" }} rules={[{ required: true, message: "Поле пустое!" }]}>
             <Input size="small" style={{ width: "100%" }} />
           </Form.Item>
           <Form.Item>
@@ -42,7 +57,25 @@ export const OrganizationId = ({ title }) => {
           </Form.Item>
         </div>
       </Form>
+      <Info state={modal} setState={setModal} />
     </>
+  );
+};
+const Info = ({ state, setState, title }) => {
+  const handleCancel = () => setState(false);
+  return (
+    <Modal
+      title="Информация о объекте"
+      visible={state}
+      onCancel={handleCancel}
+      footer={[
+        <Button key="close" onClick={handleCancel}>
+          Закрыть
+        </Button>,
+      ]}
+    >
+      1
+    </Modal>
   );
 };
 const params = (param) => {

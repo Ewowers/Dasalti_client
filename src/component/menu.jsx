@@ -162,7 +162,7 @@ const Home = ({ callback, map }) => {
     { title: "Избирательные участки", img: pollingStations },
     { title: "Дорога", img: road, map: () => map("rouads") },
     { title: "Река", img: water, map: () => map("water") },
-    { title: "Контур деревни", img: home, map: () => map("home") },
+    { title: "Контур населенного пункта", img: home, map: () => map("home") },
   ];
   return (
     <div className="grid">
