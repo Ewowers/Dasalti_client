@@ -34,9 +34,7 @@ export const Сontest = () => {
         </div>
       </div>
       <div style={{ borderTop: "1px solid", marginTop: 10 }}>
-        <Space direction="vertical">
-          <p>Случайный дом</p>
-        </Space>
+        <Space direction="vertical"></Space>
       </div>
     </div>
   );

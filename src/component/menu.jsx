@@ -12,16 +12,17 @@ import spravochnik from "../image/spravochnik.svg";
 import meropriyatia from "../image/meropriyatia.svg";
 import marshroty from "../image/marshroty.svg";
 import accessible_medium from "../image/accessible_medium.png";
-import eatyrau from "../image/eatyrau.svg";
 import obrasheniya from "../image/obrasheniya.svg";
 import kartaprestupnosti from "../image/kartaprestupnosti.svg";
 import stat from "../image/stat.svg";
 import thematicMap from "../image/thematicMap.svg";
-import pollingStations from "../image/pollingStations.svg";
 import water from "../image/water.png";
 import road from "../image/road.png";
 import home from "../image/home.png";
 import { OrganizationId } from "../menu/organizationId";
+import pravOrg from "../image/pravOrg.svg";
+import obrazUch from "../image/obrazUch.svg";
+import zdravohran from "../image/zdravohran.svg";
 export const Menu = ({ setMap }) => {
   const [state, setState] = useState("home");
   const { Title } = Typography;
@@ -158,11 +159,12 @@ const Home = ({ callback, map }) => {
     { title: "Тематические карты", img: thematicMap },
     { title: "Доступная среда", img: accessible_medium },
     { title: "Свободные земельные участки", img: thematicMap },
-    { title: "Госуслуги и сервисы", img: eatyrau },
-    { title: "Избирательные участки", img: pollingStations },
     { title: "Дорога", img: road, map: () => map("rouads") },
     { title: "Река", img: water, map: () => map("water") },
     { title: "Контур населенного пункта", img: home, map: () => map("home") },
+    { title: "Полицейский участок", img: pravOrg, map: () => map("police") },
+    { title: "Объекты здравоохранения", img: zdravohran, map: () => map("hospital") },
+    { title: "Образовательные учреждения", img: obrazUch, map: () => map("school") },
   ];
   return (
     <div className="grid">
