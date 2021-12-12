@@ -1,16 +1,16 @@
 import axios from "axios";
-import { Form, Input, Button, Space, Typography, Modal } from "antd";
+import { Form, Input, Button, Typography, Modal } from "antd";
 import { useEffect, useState } from "react";
+import { baseUrl } from "../util";
 export const OrganizationId = ({ title }) => {
   const [modal, setModal] = useState(false);
   const [state, setState] = useState([]);
-  const [info, setInfo] = useState({});
-  const { Title, Paragraph } = Typography;
+  const { Title } = Typography;
   let param = title.split("-");
   param = param[param.length - 1];
   let titles = params(param);
   const onFinish = (values) => {
-    axios.post("http://localhost:5000/api/directory/create/" + param, { ...values, category: param }).then((res) => get());
+    axios.post(baseUrl + "api/directory/create/" + param, { ...values, category: param }).then((res) => get());
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);

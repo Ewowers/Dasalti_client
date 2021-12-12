@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Modal, Button, Input, Typography } from "antd";
+import React, { useRef, useState } from "react";
+import { Modal, Button, Input, Form, Typography, message } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { Li } from "./li";
 import "./menu.css";
@@ -11,7 +11,6 @@ import tenders from "../image/tenders.svg";
 import spravochnik from "../image/spravochnik.svg";
 import meropriyatia from "../image/meropriyatia.svg";
 import marshroty from "../image/marshroty.svg";
-import accessible_medium from "../image/accessible_medium.png";
 import obrasheniya from "../image/obrasheniya.svg";
 import kartaprestupnosti from "../image/kartaprestupnosti.svg";
 import stat from "../image/stat.svg";
@@ -23,8 +22,11 @@ import { OrganizationId } from "../menu/organizationId";
 import pravOrg from "../image/pravOrg.svg";
 import obrazUch from "../image/obrazUch.svg";
 import zdravohran from "../image/zdravohran.svg";
+import axios from "axios";
+import { baseUrl } from "../util";
 export const Menu = ({ setMap }) => {
   const [state, setState] = useState("home");
+  const [message, setMessage] = useState(false);
   const { Title } = Typography;
   const back = () => setState("home");
   const callback = (arg) => {
@@ -47,7 +49,7 @@ export const Menu = ({ setMap }) => {
         <Input placeholder="Пойск" />
       </header>
       <div className="container" style={{ minHeight: 400 }}>
-        {state === "home" ? <Home callback={callback} map={map} /> : null}
+        {state === "home" ? <Home callback={callback} map={map} mes={() => setMessage(true)} /> : null}
         {state === "tender" ? <Tender callback={callback} /> : null}
         {state === "organization" ? <Organization callback={callback} /> : null}
         {state === "auction" ? <Auction /> : null}
@@ -63,6 +65,7 @@ export const Menu = ({ setMap }) => {
         <div>
           <Phone />
           <Faq />
+          <Message isModalVisible={message} setIsModalVisible={setMessage} />
         </div>
       </footer>
     </div>
@@ -147,17 +150,16 @@ const Phone = () => {
   );
 };
 
-const Home = ({ callback, map }) => {
+const Home = ({ callback, map, mes }) => {
   let ul = [
     { title: "Земельные торги", img: tenders, callback: () => callback("tender") },
-    { title: "Обращения", img: obrasheniya },
+    { title: "Обращения", img: obrasheniya, mes: mes },
     { title: "Справочник организаций", img: spravochnik, callback: () => callback("organization") },
     { title: "Карта правонарушений", img: kartaprestupnosti },
     { title: "Мероприятия города", img: meropriyatia },
     { title: "Статистика", img: stat },
     { title: "Маршруты автобусов", img: marshroty },
     { title: "Тематические карты", img: thematicMap },
-    { title: "Доступная среда", img: accessible_medium },
     { title: "Свободные земельные участки", img: thematicMap },
     { title: "Дорога", img: road, map: () => map("rouads") },
     { title: "Река", img: water, map: () => map("water") },
@@ -169,8 +171,54 @@ const Home = ({ callback, map }) => {
   return (
     <div className="grid">
       {ul.map((item, i) => (
-        <Li img={item.img} title={item.title} key={i} callback={item.callback} map={item.map} />
+        <Li img={item.img} title={item.title} key={i} callback={item.callback} map={item.map} mes={item.mes} />
       ))}
     </div>
+  );
+};
+const success = (string) => {
+  message.success(string);
+};
+const Message = ({ isModalVisible, setIsModalVisible }) => {
+  const ref = useRef(null);
+  const handleOk = () => {
+    ref.current.click();
+  };
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+  const onFinish = (values) => {
+    axios.post(baseUrl + "/api/message/", values).then((res) => {
+      console.log(res.data);
+      setIsModalVisible(false);
+      success("Ваша обращение отправленно");
+    });
+  };
+
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+  };
+  return (
+    <Modal width={700} title="Обращение" okText="Отправить" cancelText="Отмена" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+      <Form name="basic" layout="vertical" onFinish={onFinish} onFinishFailed={onFinishFailed} autoComplete="off">
+        <Form.Item label="Ваша почта" name="email" rules={[{ required: true, message: "Пожалуйста, введите адрес электронной почты!" }]}>
+          <Input />
+        </Form.Item>
+        <Form.Item label="Ваше Фио" name="fullName" rules={[{ required: true, message: "Пожалуйста, введите ваше ФИО!" }]}>
+          <Input />
+        </Form.Item>
+        <Form.Item label="Загаловок" name="subject" rules={[{ required: true, message: "Пожалуйста, введите ваше ФИО!" }]}>
+          <Input />
+        </Form.Item>
+        <Form.Item label="Обращение" name="message" rules={[{ required: true, message: "Пожалуйста, введите ваше ФИО!" }]}>
+          <Input.TextArea rows={5} />
+        </Form.Item>
+        <Form.Item style={{ display: "none" }}>
+          <Button type="primary" htmlType="submit" ref={ref}>
+            Submit
+          </Button>
+        </Form.Item>
+      </Form>
+    </Modal>
   );
 };
